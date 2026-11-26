@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClearView Optical - Eyewear Store (Member 1)</title>
+
+  <style>
+    /* ===== THEME: EYEWEAR STORE (navy + aqua + sunny yellow) ===== */
+    :root {
+      --navy: #0b2a4a;
+      --navy-soft: #16406b;
+      --aqua: #19b7c6;
+      --aqua-soft: #e2f6f8;
+      --sun: #ffd23f;
+      --bg: #f6f9fc;
+      --text: #1b2c3d;
+      --grey: #6a7c8f;
+      --line: #dbe5ee;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+
+    /* ---------- Offer bar and nav ---------- */
+    .offer { background: var(--sun); color: var(--navy); text-align: center; padding: 8px; font-weight: 700; font-size: 0.92rem; }
+    .nav {
+      background: #fff; padding: 14px 5%; display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+      border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
+    }
+    .logo { font-size: 1.6rem; font-weight: 800; color: var(--navy); }
+    .logo span { color: var(--aqua); }
+    .search { flex: 1 1 260px; }
+    .search input { width: 100%; padding: 11px 18px; border: 1px solid var(--line); border-radius: 30px; background: var(--bg); font: inherit; }
+    .search input:focus { outline: 3px solid #b8e8ed; border-color: var(--aqua); }
+    .nav a { color: var(--navy); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+    .nav a:hover { color: var(--aqua); }
+    .menu { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      background: linear-gradient(110deg, var(--navy), var(--navy-soft));
+      color: #fff; padding: 56px 5%; display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+    }
+    .hero .text { flex: 1 1 340px; }
+    .hero h1 { font-size: 2.8rem; line-height: 1.15; }
+    .hero h1 em { color: var(--sun); font-style: normal; }
+    .hero p { margin: 14px 0 24px; max-width: 460px; color: #bcd3ea; }
+    .btn {
+      display: inline-block; background: var(--aqua); color: #fff; font-weight: 700;
+      padding: 12px 28px; border-radius: 30px; text-decoration: none; border: none; font-size: 1rem; cursor: pointer;
+    }
+    .btn:hover { background: #12a0ae; }
+    .btn.alt { background: var(--sun); color: var(--navy); margin-left: 8px; }
+    .btn.alt:hover { background: #ffe07a; }
+
+    /* ---------- Glasses drawn with CSS ---------- */
+    .frame { --c: #222; display: flex; align-items: center; justify-content: center; gap: 0; }
+    .lens { width: 74px; height: 56px; border: 6px solid var(--c); background: rgba(255,255,255,0.35); }
+    .bridge { width: 22px; height: 6px; background: var(--c); border-radius: 3px; margin-top: -10px; }
+    .round  .lens { border-radius: 50%; width: 62px; height: 62px; }
+    .square .lens { border-radius: 8px; }
+    .cat    .lens { border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%; }
+    .aviator .lens { border-radius: 14% 14% 50% 50% / 14% 14% 70% 70%; }
+    .sun .lens { background: rgba(15,25,40,0.75); }
+    .hero-frame { flex: 1 1 280px; display: flex; justify-content: center; }
+    .hero-frame .frame { transform: scale(2.2); margin: 50px 0; --c: var(--sun); }
+
+    /* ---------- Categories ---------- */
+    section { padding: 44px 5%; }
+    h2 { font-size: 1.7rem; color: var(--navy); margin-bottom: 6px; }
+    .sub { color: var(--grey); margin-bottom: 22px; }
+    .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+    .cat-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px 12px; text-align: center; }
+    .cat-card:hover { border-color: var(--aqua); background: var(--aqua-soft); }
+    .cat-card b { display: block; margin-top: 8px; color: var(--navy); }
+    .cat-card small { color: var(--grey); }
+    .cat-card .frame { transform: scale(0.75); }
+
+    /* ---------- Product filter (CSS only) ---------- */
+    .filter > input { position: absolute; opacity: 0; pointer-events: none; }
+    .tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tabs label { padding: 8px 20px; border: 1px solid var(--navy); border-radius: 30px; cursor: pointer; font-weight: 600; color: var(--navy); background: #fff; }
+    .tabs label:hover { background: var(--aqua-soft); }
+    #s-all:checked ~ .tabs label[for=s-all], #s-round:checked ~ .tabs label[for=s-round],
+    #s-square:checked ~ .tabs label[for=s-square], #s-cat:checked ~ .tabs label[for=s-cat] { background: var(--navy); color: #fff; }
+    #s-round:checked  ~ .products .item:not(.is-round)  { display: none; }
+    #s-square:checked ~ .products .item:not(.is-square) { display: none; }
+    #s-cat:checked    ~ .products .item:not(.is-cat)    { display: none; }
+
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
+    .item { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; position: relative; }
+    .item:hover { box-shadow: 0 10px 26px rgba(11,42,74,0.14); }
+    .show { background: var(--aqua-soft); height: 140px; display: flex; align-items: center; justify-content: center; }
+    .show .frame { transform: scale(1.1); }
+    .info { padding: 16px; }
+    .info h3 { font-size: 1.05rem; color: var(--navy); }
+    .info p { color: var(--grey); font-size: 0.88rem; }
+    .row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+    .price { font-weight: 800; color: var(--navy); font-size: 1.1rem; }
+    .price s { color: var(--grey); font-weight: 400; font-size: 0.85rem; margin-left: 6px; }
+    .badge { position: absolute; top: 12px; left: 12px; background: var(--sun); color: var(--navy); font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 20px; }
+    .dots span { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-left: 4px; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); }
+
+    /* ---------- Features ---------- */
+    .features { background: #fff; }
+    .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .feat { text-align: center; padding: 18px; }
+    .feat .num { width: 52px; height: 52px; border-radius: 50%; background: var(--aqua); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+
+    /* ---------- Eye test booking ---------- */
+    .test { background: var(--navy); color: #fff; }
+    .test h2 { color: var(--sun); }
+    .test .sub { color: #bcd3ea; }
+    form { background: #fff; color: var(--text); max-width: 700px; padding: 26px; border-radius: 14px; }
+    .cols { display: flex; gap: 16px; flex-wrap: wrap; }
+    .cols > div { flex: 1 1 220px; }
+    label.l { display: block; margin: 12px 0 4px; font-weight: 600; }
+    input[type=text], input[type=tel], input[type=email], input[type=date], select, textarea {
+      width: 100%; padding: 10px; border: 1px solid #b6c6d6; border-radius: 8px; font: inherit; background: #fbfdff;
+    }
+    input:focus, select:focus, textarea:focus { outline: 3px solid #b8e8ed; border-color: var(--aqua); }
+    .opts label { margin-right: 16px; }
+    form .btn { margin-top: 18px; width: 100%; }
+
+    /* ---------- Lens table ---------- */
+    .tablebox { overflow-x: auto; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
+    table { width: 100%; border-collapse: collapse; min-width: 520px; }
+    th, td { padding: 13px 16px; text-align: left; border-bottom: 1px solid var(--line); }
+    th { background: var(--navy); color: #fff; }
+    tr:hover td { background: var(--aqua-soft); }
+
+    footer { background: var(--navy); color: #bcd3ea; text-align: center; padding: 20px; font-size: 0.9rem; }
+
+    @media (max-width: 700px) { .hero h1 { font-size: 2rem; } .hero-frame .frame { transform: scale(1.5); } }
+  </style>
+</head>
+
+<body>
+  <div class="offer">Buy 1 Get 1 Free on eyeglasses | Free eye test at home | 14-day easy returns</div>
+
+  <div class="nav">
+    <div class="logo">Clear<span>View</span></div>
+    <div class="search"><input type="text" placeholder="Search for frames, sunglasses, contact lenses..."></div>
+    <div class="menu">
+      <a href="#cats">Categories</a>
+      <a href="#shop">Shop</a>
+      <a href="#test">Eye test</a>
+      <a href="#lenses">Lenses</a>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="text">
+      <h1>See the world<br>in <em>style</em></h1>
+      <p>Premium frames, certified lenses and a free eye test. Starting at just Rs. 999 with a one year warranty.</p>
+      <a href="#shop" class="btn">Shop now</a><a href="#test" class="btn alt">Book eye test</a>
+    </div>
+    <div class="hero-frame"><div class="frame round"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+  </header>
+
+  <section id="cats">
+    <h2>Shop by category</h2>
+    <p class="sub">Everything for your eyes in one place.</p>
+    <div class="cats">
+      <div class="cat-card"><div class="frame square"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div><b>Eyeglasses</b><small>From Rs. 999</small></div>
+      <div class="cat-card"><div class="frame aviator sun"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div><b>Sunglasses</b><small>From Rs. 1,299</small></div>
+      <div class="cat-card"><div class="frame round"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div><b>Computer glasses</b><small>From Rs. 899</small></div>
+      <div class="cat-card"><div class="frame cat"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div><b>Kids</b><small>From Rs. 799</small></div>
+    </div>
+  </section>
+
+  <section id="shop">
+    <h2>Trending frames</h2>
+    <p class="sub">Filter by shape and pick your favourite.</p>
+
+    <div class="filter">
+      <input type="radio" name="shape" id="s-all" checked>
+      <input type="radio" name="shape" id="s-round">
+      <input type="radio" name="shape" id="s-square">
+      <input type="radio" name="shape" id="s-cat">
+
+      <div class="tabs">
+        <label for="s-all">All</label>
+        <label for="s-round">Round</label>
+        <label for="s-square">Square</label>
+        <label for="s-cat">Cat-eye</label>
+      </div>
+
+      <div class="products">
+        <article class="item is-round">
+          <span class="badge">BESTSELLER</span>
+          <div class="show"><div class="frame round" style="--c:#8a4b1f"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+          <div class="info"><h3>Vincent Round</h3><p>Lightweight acetate, full rim</p>
+            <div class="row"><span class="price">Rs. 1,499<s>Rs. 2,499</s></span><span class="dots"><span style="background:#8a4b1f"></span><span style="background:#222"></span></span></div></div>
+        </article>
+        <article class="item is-square">
+          <div class="show"><div class="frame square" style="--c:#1b3a8c"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+          <div class="info"><h3>Office Square</h3><p>Blue-light protection lenses</p>
+            <div class="row"><span class="price">Rs. 1,199<s>Rs. 1,999</s></span><span class="dots"><span style="background:#1b3a8c"></span><span style="background:#222"></span></span></div></div>
+        </article>
+        <article class="item is-cat">
+          <span class="badge">NEW</span>
+          <div class="show"><div class="frame cat" style="--c:#c2366b"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+          <div class="info"><h3>Daisy Cat-Eye</h3><p>Stylish lightweight TR90 frame</p>
+            <div class="row"><span class="price">Rs. 1,699<s>Rs. 2,799</s></span><span class="dots"><span style="background:#c2366b"></span><span style="background:#7a2fd0"></span></span></div></div>
+        </article>
+        <article class="item is-round">
+          <div class="show"><div class="frame round" style="--c:#2c2c2c"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+          <div class="info"><h3>Lennon Classic</h3><p>Thin metal rim, spring hinges</p>
+            <div class="row"><span class="price">Rs. 1,299<s>Rs. 2,199</s></span><span class="dots"><span style="background:#2c2c2c"></span><span style="background:#b8902f"></span></span></div></div>
+        </article>
+        <article class="item is-square">
+          <span class="badge">BOGO</span>
+          <div class="show"><div class="frame square" style="--c:#13795b"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+          <div class="info"><h3>Urban Edge</h3><p>Sturdy and flexible everyday frame</p>
+            <div class="row"><span class="price">Rs. 999<s>Rs. 1,799</s></span><span class="dots"><span style="background:#13795b"></span><span style="background:#222"></span></span></div></div>
+        </article>
+        <article class="item is-cat">
+          <div class="show"><div class="frame cat" style="--c:#222"><div class="lens"></div><div class="bridge"></div><div class="lens"></div></div></div>
+          <div class="info"><h3>Retro Glam</h3><p>Bold winged look, UV protection</p>
+            <div class="row"><span class="price">Rs. 1,399<s>Rs. 2,399</s></span><span class="dots"><span style="background:#222"></span><span style="background:#c2366b"></span></span></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>Why ClearView?</h2>
+    <p class="sub">Eye care you can trust.</p>
+    <div class="feat-grid">
+      <div class="feat"><div class="num">1</div><h3>Free eye test</h3><p>At our store or at your home.</p></div>
+      <div class="feat"><div class="num">2</div><h3>1 year warranty</h3><p>On every frame we sell.</p></div>
+      <div class="feat"><div class="num">3</div><h3>Easy returns</h3><p>14 days, no questions asked.</p></div>
+      <div class="feat"><div class="num">4</div><h3>Fast delivery</h3><p>Glasses ready in 3 to 5 days.</p></div>
+    </div>
+  </section>
+
+  <section id="test" class="test">
+    <h2>Book a free eye test</h2>
+    <p class="sub">Our optometrist will visit you or meet you at the store.</p>
+    <form action="#" method="post">
+      <div class="cols">
+        <div><label class="l" for="name">Full name</label><input type="text" id="name" required></div>
+        <div><label class="l" for="phone">Phone</label><input type="tel" id="phone" pattern="[0-9]{10}" placeholder="10 digits" required></div>
+      </div>
+      <div class="cols">
+        <div><label class="l" for="email">Email</label><input type="email" id="email"></div>
+        <div><label class="l" for="date">Preferred date</label><input type="date" id="date" required></div>
+      </div>
+
+      <label class="l" for="slot">Time slot</label>
+      <select id="slot"><option>10 AM - 12 PM</option><option>12 PM - 2 PM</option><option>3 PM - 5 PM</option><option>5 PM - 7 PM</option></select>
+
+      <label class="l">Where?</label>
+      <div class="opts">
+        <label><input type="radio" name="where" checked> At home</label>
+        <label><input type="radio" name="where"> At store</label>
+      </div>
+
+      <label class="l" for="addr">Address / nearest store</label>
+      <textarea id="addr" rows="3"></textarea>
+
+      <button type="submit" class="btn">Book appointment</button>
+    </form>
+  </section>
+
+  <section id="lenses">
+    <h2>Lens options</h2>
+    <p class="sub">Pick the lens that suits your lifestyle.</p>
+    <div class="tablebox">
+      <table>
+        <tr><th>Lens type</th><th>Best for</th><th>Features</th><th>Price</th></tr>
+        <tr><td>Single vision</td><td>Everyday use</td><td>Anti-glare, scratch resistant</td><td>Free</td></tr>
+        <tr><td>Blue-light cut</td><td>Screen users</td><td>Reduces eye strain</td><td>Rs. 500</td></tr>
+        <tr><td>Progressive</td><td>Age 40+</td><td>Near, mid and far in one lens</td><td>Rs. 1,800</td></tr>
+        <tr><td>Photochromic</td><td>Indoor and outdoor</td><td>Darkens in sunlight</td><td>Rs. 1,200</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>&copy; 2026 ClearView Optical | Eyewear Assignment by Member 1</footer>
+</body>
+</html>
